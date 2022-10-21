@@ -26,15 +26,32 @@ router.get('/:contactId', async (req, res) => {
 })
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const resp = await contacts.addContact(req.body)
+    res.status(201).json(resp)
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({ message: error.message})
+  }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const data = await contacts.removeContact(req.params.contactId)
+    res.status(200).json(data)
+  } catch (error) {
+    res.status(404).json({message: error.message})
+  }
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const data = await contacts.updateContact(req.params.contactId, req.body)
+    res.json(data)
+  } catch (error) {
+    res.status(404).json()
+  }
+  
 })
 
 module.exports = router
